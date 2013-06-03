@@ -1,5 +1,0 @@
-package musiccsv
-
-class RecordCollection {
-
-}

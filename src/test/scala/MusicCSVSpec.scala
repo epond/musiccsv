@@ -4,6 +4,9 @@ import org.specs2._
  * As a music lover I can obtain my record collection as a single csv file
  * including record label column in plain text and excluding unused columns
  * so that I can maintain it in Google Docs and import into a future project.
+ *
+ * Dates must be of a consistent format and releases without a date must be
+ * given start of epoch.
  */
 class MusicCSVSpec extends Specification { def is = end
 
