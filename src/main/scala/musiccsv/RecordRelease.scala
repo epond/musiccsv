@@ -1,5 +1,5 @@
 package musiccsv
 
-import java.util.Date
+import org.joda.time.DateTime
 
-case class RecordRelease(artist: String, title: String, added: Date, label: String, format: String, length: String, genre: String, mp3cd: Int, wavdvd: Int)
+case class RecordRelease(artist: String, title: String, added: DateTime, label: String, format: String, length: String, genre: String, mp3cd: Int, wavdvd: Int)

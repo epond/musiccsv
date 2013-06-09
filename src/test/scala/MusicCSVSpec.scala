@@ -13,7 +13,7 @@ class MusicCSVSpec extends Specification { def is = end
   // Given a labels csv containing two labels
   // And a record collection csv containing two records
   // When the labels are imported
-  // And the records are imported
+  // And the releases are imported
   // Then the Stockhausen record is on the Wergo label
   // And the LFO record is on the Warp label
 
