@@ -15,7 +15,11 @@ class Importer {
     val allLabelsCSV = CSVReader.open(labelsCSV).all()
     val allLabels = allLabelsCSV.map(labelLine => {
       val labelVector = labelLine.to[Vector]
-      RecordLabel(labelVector(0), labelVector(1), labelVector(2), labelVector(3), parseCatalog(labelVector(4)))
+      RecordLabel(labelVector(0),
+                  labelVector(1),
+                  labelVector(2),
+                  labelVector(3),
+                  parseCatalog(labelVector(4)))
     })
     labelsCSV.close()
     allLabels
@@ -48,7 +52,10 @@ class Importer {
     val catalogReader = CSVReader.open(new StringReader((catalogString)))
     val catalogList = catalogReader.readNext().getOrElse(List())
     val catalogVector = catalogList.to[Vector]
-    new Catalog(catalogVector(0).toInt, catalogVector(1).trim, catalogVector(2).trim, catalogVector(3).trim)
+    new Catalog(catalogVector(0).toInt,
+                catalogVector(1).trim,
+                catalogVector(2).trim,
+                catalogVector(3).trim)
   }
 
   def parseDate(dateString: String): DateTime = {
