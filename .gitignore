@@ -14,3 +14,5 @@ dist
 /RUNNING_PID
 /.settings
 specs2examples/
+src/main/resources/Record_Collection.csv
+src/main/resources/Record_Labels.csv
