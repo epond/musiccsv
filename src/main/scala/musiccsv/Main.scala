@@ -1,6 +1,7 @@
 package musiccsv
 
-import java.io.BufferedReader
+import java.io.{File, BufferedReader}
+import com.github.tototoshi.csv.CSVWriter
 
 object Main extends App {
 
@@ -12,7 +13,10 @@ object Main extends App {
   val importer = new Importer()
   val labels = importer.labels(labelsReader)
   val releases = importer.releases(releasesReader, labels)
+  val releasesCSV = releases.map(_.toCSV)
 
-  println(releases)
+  val csvWriter = CSVWriter.open(new File("releases.csv"))
 
+  csvWriter.writeAll(releasesCSV)
+  csvWriter.close()
 }
