@@ -1,4 +1,5 @@
-import java.io.{BufferedReader, StringReader, InputStreamReader, Reader}
+import com.github.tototoshi.csv.CSVWriter
+import java.io._
 import musiccsv.Importer
 import org.specs2.mutable.Specification
 
@@ -24,6 +25,7 @@ class ImporterSpec extends Specification {
 
     "convert a label csv row into a RecordLabel" in {
       val label = new Importer().labels(labelsCSV).head
+
       label.name mustEqual "warp"
       label.website mustEqual "www.warprecords.com"
       label.origin mustEqual "Sheffield"
@@ -36,6 +38,7 @@ class ImporterSpec extends Specification {
 
     "import labels wergo and warp" in {
       val labels = new Importer().labels(labelsCSV)
+
       labels.size mustEqual 2
       labels.head.name mustEqual "warp"
       labels.tail.head.name mustEqual "wergo"
@@ -45,7 +48,8 @@ class ImporterSpec extends Specification {
       val importer = new Importer()
       val labels = importer.labels(labelsCSV)
       val releases = importer.releases(releasesCSV, labels)
-      releases.size mustEqual 2
+
+      releases.size mustEqual 3
       releases.head.title mustEqual "Frequencies"
       releases.tail.head.title mustEqual "Kontakte"
     }
@@ -54,6 +58,7 @@ class ImporterSpec extends Specification {
       val importer = new Importer()
       val labels = importer.labels(labelsCSV)
       val release = importer.releases(releasesCSV, labels).head
+
       release.artist mustEqual "LFO"
       release.title mustEqual "Frequencies"
       release.added.getYear mustEqual 1991
@@ -71,6 +76,7 @@ class ImporterSpec extends Specification {
       val importer = new Importer()
       val labels = importer.labels(labelsCSV)
       val release = importer.releases(releasesCSV, labels).tail.head
+
       release.added.getYear mustEqual 1970
       release.added.getMonthOfYear mustEqual 1
       release.added.getDayOfMonth mustEqual 1
@@ -81,9 +87,35 @@ class ImporterSpec extends Specification {
       val releases = importer.releases(releasesCSV, importer.labels(labelsCSV))
       val frequencies = releases.head
       val kontakte = releases.tail.head
+
       frequencies.label mustEqual "warp"
       kontakte.label mustEqual "wergo"
     }
+
+    "export RecordRelease as CSV" in {
+      val importer = new Importer()
+      val labels = importer.labels(labelsCSV)
+      val release = importer.releases(releasesCSV, labels).tail.head
+      val stringWriter = new StringWriter();
+      val csvWriter = CSVWriter.open(stringWriter)
+      csvWriter.writeRow(release.toCSV)
+      csvWriter.close()
+
+      stringWriter.toString.trim mustEqual new String("\"Karlheinz Stockhausen\",\"Kontakte\",\"01/01/1970\",\"wergo\",\"cd\",\"full-length\",\"Electro-Accoustic\"")
+    }
+
+    "treat quote character correctly" in {
+      val importer = new Importer()
+      val labels = importer.labels(labelsCSV)
+      val release = importer.releases(releasesCSV, labels).tail.tail.head
+      val stringWriter = new StringWriter();
+      val csvWriter = CSVWriter.open(stringWriter)
+      csvWriter.writeRow(release.toCSV)
+      csvWriter.close()
+
+      release.title mustEqual "\"us\" and \"them\""
+      stringWriter.toString.trim mustEqual new String("\"Artist3\",\"\"\"us\"\" and \"\"them\"\"\",\"01/01/1970\",\"warp\",\"cd\",\"full-length\",\"Classical\"")
+    }.pendingUntilFixed
 
   }
 }
